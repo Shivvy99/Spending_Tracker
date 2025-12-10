@@ -1,5 +1,30 @@
-#environment variables
-.env
+# Python / Flask
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
 
-#virtual enviro
+# Virtual environment
 venv/
+backend/venv/
+
+# Environment variables
+.env
+backend/.env
+frontend/.env
+
+# Logs
+*.log
+
+# Node / React
+frontend/node_modules/
+frontend/build/
+
+# MacOS system files
+.DS_Store
+
+# Optional: Editor folders
+.vscode/
+.idea/
