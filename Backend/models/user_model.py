@@ -9,6 +9,3 @@ def find_user_by_email(email):
 
 def find_user_by_google_id(google_id):
     return db.users.find_one({"google_id": google_id})
-
-def find_user_by_phone(phone):
-    return db.users.find_one({"phone": phone})
