@@ -1,5 +1,6 @@
 from flask import request, Blueprint, jsonify
 from models.user_model import create_user, find_user_by_google_id
+# gets verify_google_token method that helps get the google token
 from services.google_auth import verify_google_token
 
 # blue print to add to main flask app using regiser.blueprint

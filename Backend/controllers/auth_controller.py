@@ -3,6 +3,8 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from models.user_model import create_user, find_user_by_email
 from flask import Blueprint, request, jsonify
+from config import JWT_SECRET
+import datetime, jwt
 
 # blue print to add to main flask app using regiser.blueprint
 auth = Blueprint("auth", __name__)
@@ -16,7 +18,7 @@ def signup():
     if find_user_by_email(data["email"]):
         return jsonify({"message": "User already exists"})
     hashed_pw = generate_password_hash(data["password"])
-    
+
     # called from models.user_model
     create_user({
         "email": data["email"],
@@ -32,6 +34,13 @@ def login():
     user = find_user_by_email(data["email"])
 
     if not user or not check_password_hash(user["password"], data["password"]):
-        return jsonify({"message": "Invalid credentials"}), 401
+        return jsonify({"message": "Invalid credentials"})
+    
+    # gets a jwt token in json format that tells frontend how log user can
+    # log in for
+    token = jwt.encode({
+        "user_id": str(user["_id"]),
+        "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=24)
+    }, JWT_SECRET, algorithm="HS256")
 
     return jsonify({"message": "Logged in"})
