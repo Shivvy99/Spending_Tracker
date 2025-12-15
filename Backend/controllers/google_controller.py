@@ -5,7 +5,7 @@ from services.google_auth import verify_google_token
 # blue print to add to main flask app using regiser.blueprint
 auth = Blueprint("auth", __name__)
 
-auth.route("/auth/google", methods = ["POST"])
+auth.route("/google", methods = ["POST"])
 def google_login():
     # get token from json
     token = request.json["token"]

@@ -3,16 +3,20 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from models.user_model import create_user, find_user_by_email
 from flask import Blueprint, request, jsonify
+
 # blue print to add to main flask app using regiser.blueprint
 auth = Blueprint("auth", __name__)
+
 # http route i'll that gets user and password info, returning a generated user
 @auth.route("/signup", methods = ["POST"])
 def signup():
     # get from front end
     data = request.json
+
     if find_user_by_email(data["email"]):
         return jsonify({"message": "User already exists"})
     hashed_pw = generate_password_hash(data["password"])
+    
     # called from models.user_model
     create_user({
         "email": data["email"],
@@ -21,6 +25,7 @@ def signup():
 
     return jsonify({"message": "User created"})
 
+# allows the user to log in
 @auth.route("/login", methods=["POST"])
 def login():
     data = request.json
