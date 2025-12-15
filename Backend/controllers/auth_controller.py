@@ -1,12 +1,12 @@
 # sign up features and hashed password
 
 from werkzeug.security import generate_password_hash, check_password_hash
-from models.user_model import create_user
+from models.user_model import create_user, find_user_by_email
 from flask import Blueprint, request, jsonify
 # blue print to add to main flask app using regiser.blueprint
 auth = Blueprint("auth", __name__)
 # http route i'll that gets user and password info, returning a generated user
-@auth.route("/signup", method = ["POST"])
+@auth.route("/signup", methods = ["POST"])
 def signup():
     # get from front end
     data = request.json
@@ -20,3 +20,13 @@ def signup():
     })
 
     return jsonify({"message": "User created"})
+
+@auth.route("/login", methods=["POST"])
+def login():
+    data = request.json
+    user = find_user_by_email(data["email"])
+
+    if not user or not check_password_hash(user["password"], data["password"]):
+        return jsonify({"message": "Invalid credentials"}), 401
+
+    return jsonify({"message": "Logged in"})
