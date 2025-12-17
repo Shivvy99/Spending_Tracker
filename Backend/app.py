@@ -1,15 +1,13 @@
 from flask import Flask
 from pymongo import MongoClient
-from config import MONGO_URI, SECRET_KEY
+from controllers.auth_controller import auth
 
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
 
-# Connect to MongoDB
-client = MongoClient(MONGO_URI)
-db = client.spending_tracker
-users = db.users
-transactions = db.transactions
+# Register blueprints
+app.register_blueprint(auth, url_prefix="/auth")
+
 
 @app.route("/")
 def home():
