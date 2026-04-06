@@ -28,3 +28,6 @@ frontend/build/
 # Optional: Editor folders
 .vscode/
 .idea/
+
+# Test files
+backend/temp.py

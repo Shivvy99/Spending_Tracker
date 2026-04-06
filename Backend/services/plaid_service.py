@@ -3,20 +3,31 @@
 import datetime
 from typing import Dict, List, Tuple
 
-from plaid import ApiClient, Configuration, Environment
-from plaid.api import plaid_api
-from plaid.api_client import ApiException
-from plaid.model import (
-	AccountsGetRequest,
-	CountryCode,
-	ItemPublicTokenExchangeRequest,
-	LinkTokenCreateRequest,
-	LinkTokenCreateRequestUser,
-	PlaidError,
-	Products,
-	TransactionsGetRequest,
-	TransactionsGetRequestOptions,
-)
+try:
+    from plaid import ApiClient, Configuration, Environment
+    from plaid.api import plaid_api
+    from plaid.api_client import ApiException
+    from plaid.model.accounts_get_request import AccountsGetRequest
+    from plaid.model.country_code import CountryCode
+    from plaid.model.item_public_token_exchange_request import ItemPublicTokenExchangeRequest
+    from plaid.model.link_token_create_request import LinkTokenCreateRequest
+    from plaid.model.link_token_create_request_user import LinkTokenCreateRequestUser
+    from plaid.model.plaid_error import PlaidError
+    from plaid.model.products import Products
+    from plaid.model.transactions_get_request import TransactionsGetRequest
+    from plaid.model.transactions_get_request_options import TransactionsGetRequestOptions
+except ImportError:
+    from plaid.model import (
+        AccountsGetRequest,
+        CountryCode,
+        ItemPublicTokenExchangeRequest,
+        LinkTokenCreateRequest,
+        LinkTokenCreateRequestUser,
+        PlaidError,
+        Products,
+        TransactionsGetRequest,
+        TransactionsGetRequestOptions,
+    )
 
 from config import PLAID_CLIENT_ID, PLAID_ENV, PLAID_SECRET
 
@@ -24,12 +35,16 @@ _client: plaid_api.PlaidApi | None = None
 
 
 def _get_environment():
-	env = (PLAID_ENV or "sandbox").lower()
-	return {
-		"sandbox": Environment.Sandbox,
-		"development": Environment.Development,
-		"production": Environment.Production,
-	}.get(env, Environment.Sandbox)
+    env = PLAID_ENV.lower()
+    if env == "sandbox":
+        return Environment.Sandbox
+    if env == "production":
+        return Environment.Production
+    elif env == "development":
+        return Environment.Development
+    else:
+        return Environment.Sandbox
+
 
 
 def _get_client() -> plaid_api.PlaidApi:

@@ -38,8 +38,8 @@ Flask + Mongo backend for Spending Tracker with Plaid banking connectivity.
 ## Auth recap
 
 - Sign up: `POST /auth/signup` with `{ "email", "password" }`.
-- Login: `POST /auth/login` with `{ "email", "password" }` -> returns JWT for Plaid routes.
-- Google login: `POST /auth/google` with `{ "token" }` from Google ID token.
+- Login: `POST /auth/login` with `{ "email", "password" }` -> returns app JWT.
+- Google login: `POST /auth/google` with `{ "token" }` (Google ID token) -> returns the same app JWT to use on protected routes.
 
 ## Quick smoke tests (sandbox)
 

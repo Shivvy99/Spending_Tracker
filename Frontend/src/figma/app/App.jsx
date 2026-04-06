@@ -8,6 +8,8 @@ import Services from '../pages/Services';
 import About from '../pages/About';
 import Support from '../pages/Support';
 import Privacy from '../pages/Privacy';
+import Login from '../pages/Login';
+import { ProtectedRoute } from '../../components/ProtectedRoute';
 
 export default function App() {
   return (
@@ -16,8 +18,9 @@ export default function App() {
         <Navigation />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/tracking" element={<Tracking />} />
-          <Route path="/transactions" element={<Transactions />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/tracking" element={<ProtectedRoute><Tracking /></ProtectedRoute>} />
+          <Route path="/transactions" element={<ProtectedRoute><Transactions /></ProtectedRoute>} />
           <Route path="/services" element={<Services />} />
           <Route path="/about" element={<About />} />
           <Route path="/support" element={<Support />} />

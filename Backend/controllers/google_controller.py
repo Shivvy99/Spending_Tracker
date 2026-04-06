@@ -1,5 +1,6 @@
 from flask import request, Blueprint, jsonify
 from models.user_model import create_user, find_user_by_google_id
+from services.auth_service import generate_jwt
 # gets verify_google_token method that helps get the google token
 from services.google_auth import verify_google_token
 
@@ -22,11 +23,24 @@ def google_login():
         return jsonify({"message": "Invalid Google token"}), 401
 
     user = find_user_by_google_id(google_user.get("sub"))
+    is_new_user = False
     if not user:
-        create_user({
+        result = create_user({
             "email": google_user.get("email"),
             "google_id": google_user.get("sub"),
         })
+        user_id = result.inserted_id if result else None
+        is_new_user = True
+    else:
+        user_id = user.get("_id")
 
-    return jsonify({"message": "Logged in via Google"}), 200
+    if not user_id:
+        return jsonify({"message": "Unable to create or load user"}), 500
+
+    app_token = generate_jwt(user_id)
+    return jsonify({
+        "message": "Logged in via Google",
+        "token": app_token,
+        "is_new_user": is_new_user,
+    }), 200
 

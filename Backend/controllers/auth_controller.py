@@ -2,10 +2,8 @@
 
 from werkzeug.security import generate_password_hash, check_password_hash
 from models.user_model import create_user, find_user_by_email
-from flask import Blueprint, request, jsonify, Flask
-from config import JWT_SECRET
-import datetime, jwt
-from services.middleware import token_required
+from flask import Blueprint, request, jsonify
+from services.auth_service import generate_jwt
 
 # blue print to add to main flask app using regiser.blueprint
 auth = Blueprint("auth", __name__)
@@ -74,10 +72,7 @@ def login():
         return jsonify({"message": "Invalid credentials"}), 401
     
     # Generate JWT token
-    token = jwt.encode({
-        "user_id": str(user["_id"]),
-        "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=24)
-    }, JWT_SECRET, algorithm="HS256")
+    token = generate_jwt(user["_id"])
     
     return jsonify({"message": "Logged in successfully", "token": token}), 200
 
